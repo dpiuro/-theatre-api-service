@@ -84,22 +84,19 @@ class Ticket(models.Model):
 
     def clean(self):
         if Ticket.objects.filter(
-            performance=self.performance, row=self.row, seat=self.seat
+                performance=self.performance, row=self.row, seat=self.seat
         ).exists():
             raise ValidationError(
                 f"Seat {self.row}-{self.seat} "
                 f"for this performance is already booked."
             )
 
-        if self.row > self.performance.theatre_hall.rows or self.row < 1:
+        if not (1 <= self.row <= self.performance.theatre_hall.rows):
             raise ValidationError(
                 f"Row {self.row} is out of range for this theatre hall."
             )
 
-        if (
-                self.seat > self.performance.theatre_hall.seats_in_row
-                or self.seat < 1
-        ):
+        if not (1 <= self.seat <= self.performance.theatre_hall.seats_in_row):
             raise ValidationError(
                 f"Seat {self.seat} is out of range for this theatre hall."
             )
