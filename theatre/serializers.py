@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from theatre.models import (
@@ -76,23 +75,6 @@ class TicketCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ("row", "seat", "performance", "reservation")
-
-
-User = get_user_model()
-
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ["id", "email", "password"]
-
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            email=validated_data["email"], password=validated_data["password"]
-        )
-        return user
 
 
 class PlayImageSerializer(serializers.ModelSerializer):

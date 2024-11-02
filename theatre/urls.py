@@ -9,8 +9,8 @@ from theatre.views import (
     TicketViewSet,
     ActorViewSet,
     GenreViewSet,
-    RegisterViewSet,
 )
+from user.views import RegisterViewSet
 
 
 router = DefaultRouter()
