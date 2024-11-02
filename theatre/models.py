@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.db.models import UniqueConstraint
 from rest_framework.exceptions import ValidationError
 
 
@@ -70,11 +71,25 @@ class Ticket(models.Model):
     row = models.IntegerField()
     seat = models.IntegerField()
     performance = models.ForeignKey(
-        Performance, on_delete=models.CASCADE, related_name="tickets"
+        "Performance", on_delete=models.CASCADE, related_name="tickets"
     )
     reservation = models.ForeignKey(
-        Reservation, on_delete=models.CASCADE, related_name="tickets"
+        "Reservation", on_delete=models.CASCADE, related_name="tickets"
     )
+
+    def __str__(self):
+        return (
+            f"Ticket {self.row}-{self.seat} "
+            f"for {self.performance.play.title}"
+        )
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["performance", "row", "seat"],
+                name="unique_performance_row_seat"
+            )
+        ]
 
     def __str__(self):
         return (
