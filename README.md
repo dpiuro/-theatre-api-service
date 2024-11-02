@@ -61,12 +61,6 @@ cd theatre_api_service
 ```
 #### Create .env file and set up environment variables
 ```
-POSTGRES_DB=theatre_db
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=admin12345
-POSTGRES_HOST=db
-POSTGRES_PORT=5434
-```
 
 #### Build and run Docker containers
 ```
