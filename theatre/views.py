@@ -74,9 +74,8 @@ class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketCreateSerializer
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=["post"], url_path="book")
-    def book_ticket(self, request):
-        """Endpoint for booking a ticket"""
+    def create(self, request, *args, **kwargs):
+        """Endpoint for creating (booking) a ticket"""
         user = request.user
 
         if user.is_anonymous:
@@ -114,7 +113,7 @@ class TicketViewSet(viewsets.ModelViewSet):
             reservation=reservation
         )
 
-        serializer = TicketCreateSerializer(ticket)
+        serializer = self.get_serializer(ticket)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
