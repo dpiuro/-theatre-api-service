@@ -65,12 +65,6 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = ["id", "row", "seat", "performance", "reservation"]
 
 
-class PerformanceImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Performance
-        fields = ("id", "image")
-
-
 class TicketCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket

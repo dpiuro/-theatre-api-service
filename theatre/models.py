@@ -91,12 +91,6 @@ class Ticket(models.Model):
             )
         ]
 
-    def __str__(self):
-        return (
-            f"Ticket {self.row}-{self.seat} "
-            f"for " f"{self.performance.play.title}"
-        )
-
     def clean(self):
         if Ticket.objects.filter(
                 performance=self.performance, row=self.row, seat=self.seat
