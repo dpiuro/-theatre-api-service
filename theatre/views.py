@@ -36,10 +36,7 @@ class BaseViewSet(viewsets.ModelViewSet):
 
 
 class PlayViewSet(viewsets.ModelViewSet):
-    queryset = (
-        Play.objects.all().prefetch_related
-        ("actors", "genres").order_by("id")
-    )
+    queryset = Play.objects.prefetch_related("actors", "genres").order_by("id")
     serializer_class = PlaySerializer
     permission_classes = [IsAdminOrReadOnly]
 
@@ -65,10 +62,12 @@ class TheatreHallViewSet(BaseViewSet):
     serializer_class = TheatreHallSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+
 class ReservationViewSet(BaseViewSet):
     model = Reservation
     serializer_class = ReservationSerializer
     permission_classes = [IsAdminOrReadOnly]
+
 
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
@@ -124,15 +123,15 @@ class ActorViewSet(BaseViewSet):
     serializer_class = ActorSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+
 class GenreViewSet(BaseViewSet):
     model = Genre
     serializer_class = GenreSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+
 class PerformanceViewSet(viewsets.ModelViewSet):
-    queryset = (Performance.objects.all().select_related
-                ("play", "theatre_hall")
-                )
+    queryset = Performance.objects.select_related("play", "theatre_hall")
     serializer_class = PerformanceSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {"play__title": ["icontains"]}
