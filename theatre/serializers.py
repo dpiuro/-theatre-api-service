@@ -11,6 +11,18 @@ from theatre.models import (
 )
 
 
+class PlayIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Play
+        fields = ["id"]
+
+
+class TheatreHallIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TheatreHall
+        fields = ["id"]
+
+
 class ActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
@@ -44,8 +56,12 @@ class TheatreHallSerializer(serializers.ModelSerializer):
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
-    play = PlaySerializer()
-    theatre_hall = TheatreHallSerializer()
+    play = serializers.PrimaryKeyRelatedField(
+        queryset=Play.objects
+    )
+    theatre_hall = serializers.PrimaryKeyRelatedField(
+        queryset=TheatreHall.objects
+    )
 
     class Meta:
         model = Performance
