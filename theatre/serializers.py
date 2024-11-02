@@ -24,9 +24,13 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class PlaySerializer(serializers.ModelSerializer):
-    actors = ActorSerializer(many=True)
-    genres = GenreSerializer(many=True)
-    image = serializers.ImageField(max_length=None, use_url=True)
+    actors = serializers.PrimaryKeyRelatedField(
+        queryset=Actor.objects.all(), many=True, required=False
+    )
+    genres = serializers.PrimaryKeyRelatedField(
+        queryset=Genre.objects.all(), many=True, required=False
+    )
+    image = serializers.ImageField(max_length=None, use_url=True, required=False)
 
     class Meta:
         model = Play
