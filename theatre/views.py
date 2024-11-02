@@ -4,7 +4,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-
 from theatre.models import (
     Play,
     TheatreHall,
@@ -26,14 +25,12 @@ from theatre.serializers import (
     PlayImageSerializer,
 )
 
-
 class BaseViewSet(viewsets.ModelViewSet):
     model = None
     serializer_class = None
 
     def get_queryset(self):
         return self.model.objects.all()
-
 
 class PlayViewSet(viewsets.ModelViewSet):
     queryset = Play.objects.prefetch_related("actors", "genres").order_by("id")
@@ -56,18 +53,15 @@ class PlayViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class TheatreHallViewSet(BaseViewSet):
     model = TheatreHall
     serializer_class = TheatreHallSerializer
     permission_classes = [IsAdminOrReadOnly]
 
-
 class ReservationViewSet(BaseViewSet):
     model = Reservation
     serializer_class = ReservationSerializer
     permission_classes = [IsAdminOrReadOnly]
-
 
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects.all()
@@ -116,21 +110,18 @@ class TicketViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(ticket)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
 class ActorViewSet(BaseViewSet):
     model = Actor
     serializer_class = ActorSerializer
     permission_classes = [IsAdminOrReadOnly]
-
 
 class GenreViewSet(BaseViewSet):
     model = Genre
     serializer_class = GenreSerializer
     permission_classes = [IsAdminOrReadOnly]
 
-
 class PerformanceViewSet(viewsets.ModelViewSet):
-    queryset = Performance.objects.select_related("play", "theatre_hall")
+    queryset = Performance.objects.select_related("play", "theatre_hall").prefetch_related("play__actors", "play__genres")
     serializer_class = PerformanceSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {"play__title": ["icontains"]}
